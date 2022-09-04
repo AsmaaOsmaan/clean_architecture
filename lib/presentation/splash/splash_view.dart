@@ -6,6 +6,7 @@ import 'package:clean_architecture_app/presentation/resources/routs_manager.dart
 import 'package:flutter/material.dart';
 
 import '../resources/assets_manager.dart';
+import '../resources/constants_manager.dart';
 class SplahView extends StatefulWidget {
   const SplahView({Key? key}) : super(key: key);
 
@@ -16,7 +17,7 @@ class SplahView extends StatefulWidget {
 class _SplahViewState extends State<SplahView> {
   Timer? _timer;
   _startDelay(){
-    _timer=Timer(Duration(seconds: 5),_goNext);
+    _timer=Timer(Duration(seconds: AppConstants.splashDelay),_goNext);
   }
   _goNext(){
 Navigator.popAndPushNamed(context, Routes.onBoardingRoute);
