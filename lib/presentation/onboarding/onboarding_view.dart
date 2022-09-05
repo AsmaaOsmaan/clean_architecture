@@ -2,8 +2,10 @@
 import 'package:clean_architecture_app/presentation/resources/app_strings.dart';
 import 'package:clean_architecture_app/presentation/resources/assets_manager.dart';
 import 'package:clean_architecture_app/presentation/resources/color_manager.dart';
+import 'package:clean_architecture_app/presentation/resources/values_manger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 class OnBoardingView extends StatefulWidget {
   const OnBoardingView({Key? key}) : super(key: key);
 
@@ -32,7 +34,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
 
       ),
       body: PageView.builder(itemBuilder: (context,index){
-return Container();
+return onBoardingPage(sliderObject: _list[index],);
       },
       controller: _pageController,
       itemCount: _list.length,
@@ -41,7 +43,67 @@ setState(() {
   currentIndex=index;
 });
       },),
+      bottomSheet: Container(
+        color: ColorManager.white,
+        height: AppSize.s100,
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () {  },
+                child: Text(AppString.skip,textAlign: TextAlign.end,),
+              ),
+            ),
+            _getBottomSheetWidget()
+          ],
+        ),
+      ),
     );
+  }
+  Widget _getBottomSheetWidget(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(padding: EdgeInsets.all(AppPadding.p14),
+        child:SizedBox(
+          width: AppSize.s20,
+          height: AppSize.s20,
+          child: Icon(Icons.arrow_back_ios),
+        )
+          ,),
+
+
+
+        Row(
+children: [
+  for(int i=0;i<_list.length;i++)
+    Padding(padding: EdgeInsets.all(AppPadding.p8),
+      child: _getPropertiesCircle(i),
+
+
+    )
+],
+        ),
+        Padding(padding: EdgeInsets.all(AppPadding.p14),
+          child:SizedBox(
+            width: AppSize.s20,
+            height: AppSize.s20,
+            child: Icon(Icons.arrow_forward_ios_outlined),
+          )
+          ,)
+      ],
+    );
+  }
+  Widget _getPropertiesCircle(int index){
+    if(index==currentIndex){
+      return Image.asset(ImageAssets.hollow_circle_ic);
+    }
+    else{
+      return Image.asset(ImageAssets.solid_circle_ic);
+
+    }
+
   }
 }
 class onBoardingPage extends StatelessWidget {
@@ -50,7 +112,24 @@ class onBoardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+ const SizedBox(height: AppSize.s40,),
+        Padding(
+          padding: const EdgeInsets.all(AppPadding.p8),
+          child: Text(sliderObject!.title,textAlign: TextAlign.center,style: Theme.of(context).textTheme.displayLarge,),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(AppPadding.p8),
+          child: Text(sliderObject!.subTitle,textAlign: TextAlign.center,style: Theme.of(context).textTheme.headlineMedium,),
+
+        ),
+        const SizedBox(height: AppSize.s60,),
+        SvgPicture.asset(sliderObject!.image)
+
+      ],
+    );
   }
 }
 
