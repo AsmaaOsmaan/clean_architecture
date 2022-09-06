@@ -1,11 +1,16 @@
 
+
+import 'package:clean_architecture_app/presentation/onboarding/widgets/custom_circle.dart';
 import 'package:clean_architecture_app/presentation/resources/app_strings.dart';
 import 'package:clean_architecture_app/presentation/resources/assets_manager.dart';
 import 'package:clean_architecture_app/presentation/resources/color_manager.dart';
+import 'package:clean_architecture_app/presentation/resources/constants_manager.dart';
 import 'package:clean_architecture_app/presentation/resources/values_manger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../resources/routs_manager.dart';
 class OnBoardingView extends StatefulWidget {
   const OnBoardingView({Key? key}) : super(key: key);
 
@@ -30,6 +35,8 @@ class _OnBoardingViewState extends State<OnBoardingView> {
     return Scaffold(
       backgroundColor: ColorManager.white,
       appBar: AppBar(
+        backgroundColor: ColorManager.white,
+elevation: AppSize.s0,
         systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: ColorManager.white,statusBarBrightness: Brightness.dark),
 
       ),
@@ -45,14 +52,21 @@ setState(() {
       },),
       bottomSheet: Container(
         color: ColorManager.white,
-        height: AppSize.s100,
+       // height: AppSize.s100,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () {  },
-                child: Text(AppString.skip,textAlign: TextAlign.end,),
+                onPressed: () { 
+                  
+                  
+                  Navigator.pushReplacementNamed(context, Routes.loginRoute);
+                },
+                child: Text(AppString.skip,textAlign: TextAlign.end,
+                style: Theme.of(context).textTheme.titleMedium,
+                ),
               ),
             ),
             _getBottomSheetWidget()
@@ -62,45 +76,117 @@ setState(() {
     );
   }
   Widget _getBottomSheetWidget(){
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(padding: EdgeInsets.all(AppPadding.p14),
-        child:SizedBox(
-          width: AppSize.s20,
-          height: AppSize.s20,
-          child: Icon(Icons.arrow_back_ios),
-        )
-          ,),
+    return Container(
+      color: ColorManager.primary,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(padding: EdgeInsets.all(AppPadding.p14),
+          child:GestureDetector(
+            child: SizedBox(
+              width: AppSize.s20,
+              height: AppSize.s20,
+              child: Icon(Icons.arrow_back_ios,color: ColorManager.white,size: AppSize.s20,),
+            ),
+            onTap: (){
+              _pageController.animateToPage(getPreviousIndex(), duration: Duration(milliseconds: AppConstants.sliderAnimationTime), curve: Curves.bounceInOut);
+            },
+          )
+            ,),
 
 
 
-        Row(
+          Row(
 children: [
   for(int i=0;i<_list.length;i++)
-    Padding(padding: EdgeInsets.all(AppPadding.p8),
-      child: _getPropertiesCircle(i),
+      Padding(padding: EdgeInsets.all(AppPadding.p8),
+        child: _getPropertiesCircle(i),
 
 
-    )
+      )
 ],
-        ),
-        Padding(padding: EdgeInsets.all(AppPadding.p14),
-          child:SizedBox(
-            width: AppSize.s20,
-            height: AppSize.s20,
-            child: Icon(Icons.arrow_forward_ios_outlined),
-          )
-          ,)
-      ],
+          ),
+          Padding(padding: EdgeInsets.all(AppPadding.p14),
+            child:GestureDetector(
+              onTap: (){
+                _pageController.animateToPage(getNextIndex(), duration: Duration(milliseconds: AppConstants.sliderAnimationTime), curve: Curves.bounceInOut);
+
+              },
+              child: SizedBox(
+                width: AppSize.s20,
+                height: AppSize.s20,
+                child: Icon(Icons.arrow_forward_ios_outlined,color: ColorManager.white,size: AppSize.s20),
+              ),
+            )
+            ,)
+        ],
+      ),
     );
   }
+
+
+
+  int getPreviousIndex(){
+    int previousIndex=--currentIndex;
+    if(previousIndex==-1){
+      previousIndex=_list.length-1;
+
+    }
+    return previousIndex;
+  }
+
+
+  int getNextIndex(){
+    int nextIndex=++currentIndex;
+    if(nextIndex==_list.length){
+      nextIndex=0;
+
+    }
+    return nextIndex;
+  }
+
+
+
+
+
+
+
+
+
   Widget _getPropertiesCircle(int index){
     if(index==currentIndex){
-      return Image.asset(ImageAssets.hollow_circle_ic);
+      return
+        CustomCircle(solid: false,);
+
+      //   Padding(
+      //   padding: const EdgeInsets.only(bottom: 10),
+      //   child: Container(
+      //     height: 20,
+      //     width: 20,
+      //     decoration: BoxDecoration(
+      //       color: ColorManager.primary,
+      //       borderRadius: BorderRadius.circular(50),
+      //       border: Border.all(color: Colors.blueAccent),
+      //   ),
+      // ));
+
+
+      //  Image.asset(ImageAssets.hollow_circle_ic);
     }
     else{
-      return Image.asset(ImageAssets.solid_circle_ic);
+      return  const CustomCircle(solid: true,);
+
+
+      //   Container(
+      //   height: 50,
+      //   width: 50,
+      //   decoration: BoxDecoration(
+      //       color: ColorManager.primary,
+      //       borderRadius: BorderRadius.circular(50)
+      //   ),
+      // );
+
+        //Image.asset(ImageAssets.solid_circle_ic);
 
     }
 

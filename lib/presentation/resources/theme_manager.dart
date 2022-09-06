@@ -52,7 +52,7 @@ borderRadius: BorderRadius.circular(AppSize.s12)
       displayLarge: getSemiBoldStyle(color: ColorManager.darkGray,fontSize: FontSize.s16),
       headlineLarge: getSemiBoldStyle(color: ColorManager.darkGray,fontSize: FontSize.s16),
       headlineMedium: getRegularStyle(color: ColorManager.darkGray,fontSize: FontSize.s14),
-      titleMedium: getMediumStyle(color: ColorManager.lightGrey,fontSize: FontSize.s14),
+      titleMedium: getMediumStyle(color: ColorManager.primary,fontSize: FontSize.s16),
       bodyLarge: getRegularStyle(color: ColorManager.grey),
       bodySmall: getRegularStyle(color: ColorManager.grey)
     ),
