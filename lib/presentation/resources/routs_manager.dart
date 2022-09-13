@@ -1,5 +1,5 @@
 import 'package:clean_architecture_app/presentation/main/main_view.dart';
-import 'package:clean_architecture_app/presentation/onboarding/onboarding_view.dart';
+import 'package:clean_architecture_app/presentation/onboarding/view/onboarding_view.dart';
 import 'package:clean_architecture_app/presentation/register/register_view.dart';
 import 'package:clean_architecture_app/presentation/splash/splash_view.dart';
 import 'package:flutter/cupertino.dart';
