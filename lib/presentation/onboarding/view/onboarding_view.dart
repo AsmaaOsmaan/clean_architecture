@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../domain/models.dart';
 import '../../resources/routs_manager.dart';
 class OnBoardingView extends StatefulWidget {
   const OnBoardingView({Key? key}) : super(key: key);
@@ -219,9 +220,3 @@ class onBoardingPage extends StatelessWidget {
   }
 }
 
-class SliderObject{
-  String title;
-  String subTitle;
-  String image;
-  SliderObject(this.title,this.subTitle,this.image);
-}
