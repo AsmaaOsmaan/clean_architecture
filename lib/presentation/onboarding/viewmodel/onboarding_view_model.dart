@@ -9,6 +9,7 @@ import '../../resources/assets_manager.dart';
 class OnBoardingViewModel extends BaseViewModel with OnBoardingViewModelInput,OnBoardingViewModelOutput {
   StreamController _streamController=StreamController<SliderViewObject>();
   late final List<SliderObject>_list;
+  int currentIndex=0;
 
   @override
   void dispose() {
@@ -20,21 +21,38 @@ class OnBoardingViewModel extends BaseViewModel with OnBoardingViewModelInput,On
   void start() {
     // TODO: implement start
     _list=_getSliderData();
+    _postDataToView();
   }
 
   @override
-  void goNext() {
+  int goNext() {
     // TODO: implement goNext
+    int nextIndex=++currentIndex;
+    if(nextIndex==_list.length){
+      nextIndex=0;
+
+    }
+    return nextIndex;
   }
 
   @override
-  void goPrevious() {
+  int goPrevious() {
     // TODO: implement goPrevious
+
+
+    int previousIndex=--currentIndex;
+    if(previousIndex==-1){
+      previousIndex=_list.length-1;
+
+    }
+    return previousIndex;
   }
 
   @override
   void onPageChanged(int index) {
     // TODO: implement onPageChanged
+    currentIndex=index;
+    _postDataToView();
   }
 
   @override
@@ -44,6 +62,11 @@ class OnBoardingViewModel extends BaseViewModel with OnBoardingViewModelInput,On
   @override
   // TODO: implement outPutSliderViewObject
   Stream<SliderViewObject> get outPutSliderViewObject => _streamController.stream.map((sliderViewObject) => sliderViewObject);
+
+
+  void _postDataToView(){
+    inputSliderViewObject.add(SliderViewObject(_list[currentIndex], currentIndex, _list.length));
+  }
 
 
   List<SliderObject>_getSliderData()=>[
