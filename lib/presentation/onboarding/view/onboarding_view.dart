@@ -21,7 +21,7 @@ class OnBoardingView extends StatefulWidget {
 }
 
 class _OnBoardingViewState extends State<OnBoardingView> {
-  late final List<SliderObject>_list=_getSliderData();
+ // late final List<SliderObject>_list=_getSliderData();
   PageController _pageController=PageController();
 
   OnBoardingViewModel viewModel=OnBoardingViewModel();
@@ -33,63 +33,74 @@ class _OnBoardingViewState extends State<OnBoardingView> {
     _bind();
 super.initState();
   }
-  int currentIndex=0;
-  List<SliderObject>_getSliderData()=>[
-   SliderObject(AppString.onBoardingTitle1, AppString.onBoardingSubTitle1, ImageAssets.onBoardingLogo1),
-   SliderObject(AppString.onBoardingTitle2, AppString.onBoardingSubTitle2, ImageAssets.onBoardingLogo2),
-   SliderObject(AppString.onBoardingTitle3, AppString.onBoardingSubTitle3, ImageAssets.onBoardingLogo3),
-  ];
+  //int currentIndex=0;
+  // List<SliderObject>_getSliderData()=>[
+  //  SliderObject(AppString.onBoardingTitle1, AppString.onBoardingSubTitle1, ImageAssets.onBoardingLogo1),
+  //  SliderObject(AppString.onBoardingTitle2, AppString.onBoardingSubTitle2, ImageAssets.onBoardingLogo2),
+  //  SliderObject(AppString.onBoardingTitle3, AppString.onBoardingSubTitle3, ImageAssets.onBoardingLogo3),
+  // ];
 
-Widget getContent(){
-  return Scaffold(
-    backgroundColor: ColorManager.white,
-    appBar: AppBar(
+Widget getContent(SliderViewObject ? sliderViewObject){
+  if (sliderViewObject==null){
+    return Container();
+  }else{
+    return Scaffold(
       backgroundColor: ColorManager.white,
-      elevation: AppSize.s0,
-      systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: ColorManager.white,statusBarBrightness: Brightness.dark),
+      appBar: AppBar(
+        backgroundColor: ColorManager.white,
+        elevation: AppSize.s0,
+        systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: ColorManager.white,statusBarBrightness: Brightness.dark),
 
-    ),
-    body: PageView.builder(itemBuilder: (context,index){
-      return onBoardingPage(sliderObject: _list[index],);
-    },
-      controller: _pageController,
-      itemCount: _list.length,
-      onPageChanged: (index){
-        setState(() {
-          currentIndex=index;
-        });
-      },),
-    bottomSheet: Container(
-      color: ColorManager.white,
-      // height: AppSize.s100,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {
+      ),
+      body: PageView.builder(itemBuilder: (context,index){
+        return onBoardingPage(sliderObject: sliderViewObject.sliderObject);
+      },
+        controller: _pageController,
+        itemCount: sliderViewObject.numOfSlides,
+        onPageChanged: (index){
+        viewModel.onPageChanged(index);
+        },),
+      bottomSheet: Container(
+        color: ColorManager.white,
+        // height: AppSize.s100,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () {
 
 
-                Navigator.pushReplacementNamed(context, Routes.loginRoute);
-              },
-              child: Text(AppString.skip,textAlign: TextAlign.end,
-                style: Theme.of(context).textTheme.titleMedium,
+                  Navigator.pushReplacementNamed(context, Routes.loginRoute);
+                },
+                child: Text(AppString.skip,textAlign: TextAlign.end,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               ),
             ),
-          ),
-          _getBottomSheetWidget()
-        ],
+            _getBottomSheetWidget(sliderViewObject)
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
+
 }
 
   @override
   Widget build(BuildContext context) {
-    return getContent();
+    return StreamBuilder<SliderViewObject>(
+        stream: viewModel.outPutSliderViewObject,
+
+        builder: (context, snapshot) {
+return getContent(snapshot.data);
+    });
+
+
+
   }
-  Widget _getBottomSheetWidget(){
+  Widget _getBottomSheetWidget(SliderViewObject sliderViewObject){
     return Container(
       color: ColorManager.primary,
       child: Row(
@@ -103,7 +114,7 @@ Widget getContent(){
               child: Icon(Icons.arrow_back_ios,color: ColorManager.white,size: AppSize.s20,),
             ),
             onTap: (){
-              _pageController.animateToPage(getPreviousIndex(), duration: Duration(milliseconds: AppConstants.sliderAnimationTime), curve: Curves.bounceInOut);
+              _pageController.animateToPage(viewModel.goPrevious(), duration: Duration(milliseconds: AppConstants.sliderAnimationTime), curve: Curves.bounceInOut);
             },
           )
             ,),
@@ -112,9 +123,9 @@ Widget getContent(){
 
           Row(
 children: [
-  for(int i=0;i<_list.length;i++)
+  for(int i=0;i<sliderViewObject.numOfSlides;i++)
       Padding(padding: EdgeInsets.all(AppPadding.p8),
-        child: _getPropertiesCircle(i),
+        child: _getPropertiesCircle(i,sliderViewObject.currentIndex),
 
 
       )
@@ -123,7 +134,7 @@ children: [
           Padding(padding: EdgeInsets.all(AppPadding.p14),
             child:GestureDetector(
               onTap: (){
-                _pageController.animateToPage(getNextIndex(), duration: Duration(milliseconds: AppConstants.sliderAnimationTime), curve: Curves.bounceInOut);
+                _pageController.animateToPage(viewModel.goNext(), duration: Duration(milliseconds: AppConstants.sliderAnimationTime), curve: Curves.bounceInOut);
 
               },
               child: SizedBox(
@@ -139,27 +150,25 @@ children: [
   }
 
 
-
-  int getPreviousIndex(){
-    int previousIndex=--currentIndex;
-    if(previousIndex==-1){
-      previousIndex=_list.length-1;
-
-    }
-    return previousIndex;
-  }
-
-
-  int getNextIndex(){
-    int nextIndex=++currentIndex;
-    if(nextIndex==_list.length){
-      nextIndex=0;
-
-    }
-    return nextIndex;
-  }
-
-
+  //
+  // int getPreviousIndex(){
+  //   int previousIndex=--currentIndex;
+  //   if(previousIndex==-1){
+  //     previousIndex=_list.length-1;
+  //
+  //   }
+  //   return previousIndex;
+  // }
+  //
+  //
+  // int getNextIndex(){
+  //   int nextIndex=++currentIndex;
+  //   if(nextIndex==_list.length){
+  //     nextIndex=0;
+  //
+  //   }
+  //   return nextIndex;
+  // }
 
 
 
@@ -167,7 +176,9 @@ children: [
 
 
 
-  Widget _getPropertiesCircle(int index){
+
+
+  Widget _getPropertiesCircle(int index,int currentIndex){
     if(index==currentIndex){
       return
         CustomCircle(solid: false,);
