@@ -157,3 +157,8 @@ class ResponseMessage {
       "please check your internet connection";
   static const String DEFUALT = "some thing went wrong ";
 }
+class ApiInternalStatues{
+  static const int SUCCESS=0;
+  static const int FAILURE=1;
+
+}
