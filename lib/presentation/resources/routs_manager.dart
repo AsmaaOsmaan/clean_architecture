@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../forget_password/forget_password_view.dart';
-import '../login/login_view.dart';
+import '../login/view/login_view.dart';
 import 'app_strings.dart';
 
 class Routes{
