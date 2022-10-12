@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:clean_architecture_app/domain/models.dart';
+import 'package:clean_architecture_app/domain/models/models.dart';
 import 'package:clean_architecture_app/presentation/base/base_view_model.dart';
 
 import '../../resources/app_strings.dart';
