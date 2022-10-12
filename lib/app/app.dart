@@ -2,6 +2,7 @@ import 'package:clean_architecture_app/presentation/resources/routs_manager.dart
 import 'package:flutter/material.dart';
 import '../presentation/resources/theme_manager.dart';
 // test push to hussain
+// main
 class MyApp extends StatefulWidget {
  // const MyApp({Key? key}) : super(key: key);
   MyApp._internal();
